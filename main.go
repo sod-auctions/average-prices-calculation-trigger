@@ -398,7 +398,7 @@ func handler(ctx context.Context, snsEvent events.SNSEvent) error {
 	}
 
 	overOneWeekAgo := date.Add(-169 * time.Hour)
-	bucketName = fmt.Sprintf("results/percentile_averages/year=%s/month=%s/day=%s/hour=%s",
+	bucketName = fmt.Sprintf("results/aggregates/interval=1/year=%s/month=%s/day=%s/hour=%s",
 		overOneWeekAgo.Format("2006"), overOneWeekAgo.Format("01"), overOneWeekAgo.Format("02"), overOneWeekAgo.Format("15"))
 	log.Printf("downloading file %s\n", bucketName)
 	file, err = download(*s3Client, ctx, "sod-auctions", bucketName)
