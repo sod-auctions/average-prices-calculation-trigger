@@ -111,6 +111,13 @@ func upload(client *s3.S3, bucket string, key string, filename string) error {
 func read(closer io.ReadCloser) (map[string]*PriceAverage, error) {
 	priceAverages := make(map[string]*PriceAverage)
 	r := csv.NewReader(closer)
+
+	// Read header
+	_, err := r.Read()
+	if err != nil {
+		return nil, err
+	}
+
 	for {
 		row, err := r.Read()
 		if err == io.EOF {
@@ -166,6 +173,11 @@ func write(priceAverages map[string]*PriceAverage) error {
 		"rowCount",
 		"quantitySum",
 		"p05Sum",
+		"p10Sum",
+		"p25Sum",
+		"p50Sum",
+		"p75Sum",
+		"p90Sum",
 	})
 	if err != nil {
 		return err
@@ -206,6 +218,13 @@ func write(priceAverages map[string]*PriceAverage) error {
 
 func removeOld(closer io.ReadCloser, priceAverages map[string]*PriceAverage) (map[string]*PriceAverage, error) {
 	r := csv.NewReader(closer)
+
+	// Read header
+	_, err := r.Read()
+	if err != nil {
+		return nil, err
+	}
+
 	for {
 		row, err := r.Read()
 		if err == io.EOF {
@@ -247,6 +266,13 @@ func removeOld(closer io.ReadCloser, priceAverages map[string]*PriceAverage) (ma
 
 func addNew(closer io.ReadCloser, priceAverages map[string]*PriceAverage) (map[string]*PriceAverage, error) {
 	r := csv.NewReader(closer)
+
+	// Read header
+	_, err := r.Read()
+	if err != nil {
+		return nil, err
+	}
+
 	for {
 		row, err := r.Read()
 		if err == io.EOF {
