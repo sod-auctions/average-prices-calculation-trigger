@@ -395,7 +395,7 @@ func handler(ctx context.Context, snsEvent events.SNSEvent) error {
 	s3Client := s3.New(sess)
 
 	oneHourAgo := date.Add(-1 * time.Hour)
-	bucketName := fmt.Sprintf("results/percentile_averages/year=%s/month=%s/day=%s/hour=%s",
+	bucketName := fmt.Sprintf("results/average-prices/year=%s/month=%s/day=%s/hour=%s",
 		oneHourAgo.Format("2006"), oneHourAgo.Format("01"), oneHourAgo.Format("02"), oneHourAgo.Format("15"))
 	log.Printf("downloading file %s\n", bucketName)
 	file, err := download(*s3Client, ctx, "sod-auctions", bucketName)
@@ -443,7 +443,7 @@ func handler(ctx context.Context, snsEvent events.SNSEvent) error {
 		return fmt.Errorf("error writing file: %v", err)
 	}
 
-	fileKey := fmt.Sprintf("results/percentile_averages/year=%s/month=%s/day=%s/hour=%s/price_averages.csv",
+	fileKey := fmt.Sprintf("results/average-prices/year=%s/month=%s/day=%s/hour=%s/price_averages.csv",
 		dateInfo["year"], dateInfo["month"], dateInfo["day"], dateInfo["hour"])
 	err = upload(s3Client, "sod-auctions", fileKey, "/tmp/price_averages.csv")
 
